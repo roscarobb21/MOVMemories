@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { db, collection, addDoc } from "../firebase";
+
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -22,6 +24,8 @@ function Conctact_form() {
   // is visible for contact form
   const [contactFormVisible, setContactFormVisible] = useState(true)
   const [calendarVisible, setCalendarVisible] = useState(false)
+  const [uid, setUid] = useState(null)
+
   // form data
   const [first_name, setFirstName] = useState("")
   const [last_name, setLastName] = useState("")
@@ -31,23 +35,45 @@ function Conctact_form() {
   const [message, setMessage] = useState("")
   const [generalErr, setGeneralErr] = useState(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
-
   const [selectedValue, setSelectedValue] = useState('y');
+
+  const add_contact_message  = async () =>{
+    let response = await addDoc(collection(db, "contact-messages"), {
+      firstName: first_name,
+      lastName: last_name,
+      email: email,
+      message: message,
+      phoneNumber: phone,
+      has_booking: selectedValue == 'y',
+      createdAt: new Date(), // Optionally add timestamp
+    });
+    console.log("response from contact ", response.id);
+    setUid(response.id);
+  }
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
 
   const toggle = () => {
-    setContactFormVisible(false); // Unmount contact form
+    setContactFormVisible(false);
+  }
+
+  const toggle_back = () => {
+    setCalendarVisible(false);
+    setContactFormVisible(true);
   };
 
-  const controlProps = (item) => ({
+  const confirm_action = (check) =>{
+    alert('send form + ', check)
+  }
+
+  const inputprops = (item) => ({
     checked: selectedValue === item,
     onChange: handleChange,
     value: item,
     name: 'color-radio-button-demo',
-    inputProps: { 'aria-label': item },
+    inputprops: { 'aria-label': item },
   });
 
   const handleSubmit = () =>{
@@ -72,12 +98,13 @@ function Conctact_form() {
       setSubmitSuccess(true);
       setTimeout(() => {
         setSubmitSuccess(false);
-      }, 10000);
+      }, 5000);
       setFirstName("");
       setLastName("");
       setEmail("");
       setPhone("");
       setMessage("");
+      add_contact_message();
     }
     // unmount form and mount calendar to select time frame
     else {
@@ -86,7 +113,7 @@ function Conctact_form() {
   }
 
   return (
-    <div>
+    <div >
       <AnimatePresence>
         {contactFormVisible && (
           <motion.div
@@ -102,7 +129,7 @@ function Conctact_form() {
               <Box
                 component="form"
                 sx={{
-                  "& > :not(style)": { m: 1, width: "100%" },
+                  "& > :not(style)": { m: 1, width: "66%" },
                 }}
                 noValidate
                 autoComplete="off"
@@ -133,7 +160,7 @@ function Conctact_form() {
               </Box>
               <Box
                 component="form"
-                sx={{ gap: 1, "& > :not(style)": { m: 1, width: "100%" } }}
+                sx={{ gap: 1, "& > :not(style)": { m: 1, width:"66%" } }}
                 noValidate
                 autoComplete="off"
               >
@@ -164,6 +191,13 @@ function Conctact_form() {
                     setPhone(e.target.value);
                   }}
                 />
+                </Box>
+                <Box
+                component="form"
+                sx={{ gap: 1, "& > :not(style)": { m: 1, width: "66%" } }}
+                noValidate
+                autoComplete="off"
+              >
                 <TextField
                   value={message}
                   style={{ backgroundColor: "white" }}
@@ -185,7 +219,7 @@ function Conctact_form() {
                     onChange={handleChange}
                   >
                     <FormControlLabel
-                      {...controlProps("y")}
+                      {...inputprops("y")}
                       style={{ color: "white" }}
                       value="y"
                       color="secondary"
@@ -201,7 +235,7 @@ function Conctact_form() {
                       }}
                     />
                     <FormControlLabel
-                      {...controlProps("n")}
+                      {...inputprops("n")}
                       style={{ color: "white" }}
                       value="n"
                       control={<Radio />}
@@ -217,7 +251,7 @@ function Conctact_form() {
                     />
                   </RadioGroup>
                 </FormControl>
-                <Button variant="outlined" onClick={handleSubmit}>
+                <Button variant="outlined" onClick={handleSubmit} style={{width:'33%'}}>
                   Submit
                 </Button>
               </Box>
@@ -252,7 +286,7 @@ function Conctact_form() {
               }}
             >
               <div className="space-grotesk-big-bold inverted-color-text">
-                <Calendar />
+                <Calendar backAction_={toggle_back} confirmAction_={confirm_action}/>
               </div>
             </motion.div>
           )}

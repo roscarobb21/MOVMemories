@@ -20,12 +20,12 @@ import Loader from "../pages/Loader";
 import "./Contact.css";
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-function Contact({langData, navData}) {
+function Contact({ langData, navData }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Initial check
   const [emailValid, setEmailValid] = useState(undefined);
   const [generalError, setGeneralError] = useState("");
   const [submit, setSubmit] = useState(undefined);
-  const [navLang, setNavLang] = useState(null)
+  const [navLang, setNavLang] = useState(null);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -36,7 +36,7 @@ function Contact({langData, navData}) {
   });
 
   const [statusMessage, setStatusMessage] = useState("");
-  const [langFile, setLangFile] = useState(null)
+  const [langFile, setLangFile] = useState(null);
 
   useEffect(() => {
     if (langData) setLangFile(langData);
@@ -49,18 +49,15 @@ function Contact({langData, navData}) {
     };
 
     // Add event listener for resize
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Cleanup the event listener on component unmount
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  
-
-  if (langFile === null)
-  {
+  if (langFile === null) {
     return <Loader />;
   }
 
@@ -69,12 +66,11 @@ function Contact({langData, navData}) {
       <div style={{ minHeight: "100vh" }} className="background-dark-color">
         <Navigator lang={navLang} />
         <Container
-          fluid
-          style={{minHeight:'70vh'}}
+          style={{ minHeight: "70vh" }}
           className="d-flex margin-from-header default-container-padding"
         >
           <Row
-            style={{ heigh: "inherit" }}
+            style={{ heigh: "inherit", width: "100% !important" }}
             className="justify-content-center align-items-center"
           >
             <Col lg={6} md={12}>
@@ -93,15 +89,26 @@ function Contact({langData, navData}) {
                 </div>
               </Row>
             </Col>
-            <Col lg={6} md={12} style={{height: isMobile ? 'auto' : '100%'}}>
-              {isMobile && <br></br>}
-              <Contact_form/>
+          </Row>
+          <br></br>
+          <br></br>
+          <Row
+            className="d-flex justify-content-center align-items-center"
+            style={{ width: "100%" }}
+          >
+            <Col
+              lg={12}
+              md={12}
+              style={{ height: isMobile ? "auto" : "100%" }}
+              className="justify-content-center align-items-center"
+            >
+              <div className="justify-content-center align-items-center">
+                <Contact_form />
+              </div>
             </Col>
           </Row>
         </Container>
-        <div>
-          {/* <Booking lang={langFile.booking} /> */}
-        </div>
+        <div>{/* <Booking lang={langFile.booking} /> */}</div>
         <Socials />
       </div>
     </div>
