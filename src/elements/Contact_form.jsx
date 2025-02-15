@@ -1,19 +1,13 @@
 import { useState } from "react";
 
-import { db, collection, addDoc } from "../firebase";
-
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import { motion, AnimatePresence } from 'framer-motion';
 
 import Alert from '@mui/material/Alert';
-
-import Calendar from "./Calendar";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -23,8 +17,6 @@ const TRANSITION_X_FACTOR = 500;
 function Conctact_form() {
   // is visible for contact form
   const [contactFormVisible, setContactFormVisible] = useState(true)
-  const [calendarVisible, setCalendarVisible] = useState(false)
-  const [uid, setUid] = useState(null)
 
   // form data
   const [first_name, setFirstName] = useState("")
@@ -38,60 +30,29 @@ function Conctact_form() {
   const [selectedValue, setSelectedValue] = useState('y');
 
   const add_contact_message  = async () =>{
-    let response = await addDoc(collection(db, "contact-messages"), {
-      firstName: first_name,
-      lastName: last_name,
-      email: email,
-      message: message,
-      phoneNumber: phone,
-      has_booking: selectedValue == 'y',
-      createdAt: new Date(), // Optionally add timestamp
-    });
-    console.log("response from contact ", response.id);
-    setUid(response.id);
+    console.log("Not supported right now!")
   }
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
 
-  const toggle = () => {
-    setContactFormVisible(false);
-  }
-
-  const toggle_back = () => {
-    setCalendarVisible(false);
-    setContactFormVisible(true);
-  };
-
-  const confirm_action = (check) =>{
-    alert('send form + ', check)
-  }
-
-  const inputprops = (item) => ({
-    checked: selectedValue === item,
-    onChange: handleChange,
-    value: item,
-    name: 'color-radio-button-demo',
-    inputprops: { 'aria-label': item },
-  });
-
   const handleSubmit = () =>{
     // validations
-    // if (!emailRegex.test(email)) {
-    //   setEmailErr("Please provide a valid email 🥰");
-    //   return;
-    // }
-    // if (
-    //   first_name.length < 1 ||
-    //   last_name.length < 1 ||
-    //   phone.length < 1 ||
-    //   message.length < 1
-    // ) {
-    //   console.log("General ERROR");
-    //   setGeneralErr("Please fill out the form 🥰");
-    //   return;
-    // }
+    if (!emailRegex.test(email)) {
+      setEmailErr("Please provide a valid email 🥰");
+      return;
+    }
+    if (
+      first_name.length < 1 ||
+      last_name.length < 1 ||
+      phone.length < 1 ||
+      message.length < 1
+    ) {
+      console.log("General ERROR");
+      setGeneralErr("Please fill out the form 🥰");
+      return;
+    }
     // also sumbit in database without booking
     // TODO submit
     if (selectedValue === "n") {
@@ -104,12 +65,8 @@ function Conctact_form() {
       setEmail("");
       setPhone("");
       setMessage("");
-      add_contact_message();
     }
-    // unmount form and mount calendar to select time frame
-    else {
-      toggle();
-    }
+    add_contact_message();
   }
 
   return (
@@ -211,46 +168,6 @@ function Conctact_form() {
                     setMessage(e.target.value);
                   }}
                 />
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-controlled-radio-buttons-group"
-                    name="controlled-radio-buttons-group"
-                    value={selectedValue}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      {...inputprops("y")}
-                      style={{ color: "white" }}
-                      value="y"
-                      color="secondary"
-                      control={<Radio />}
-                      label="I want to request a booking for a meeting"
-                      sx={{
-                        "& .MuiSvgIcon-root": {
-                          color: "white", // Default color (outline of the radio button)
-                        },
-                        "&.Mui-checked .MuiSvgIcon-root": {
-                          color: "white", // Color when the radio button is selected
-                        },
-                      }}
-                    />
-                    <FormControlLabel
-                      {...inputprops("n")}
-                      style={{ color: "white" }}
-                      value="n"
-                      control={<Radio />}
-                      label="I do not want a meeting"
-                      sx={{
-                        "& .MuiSvgIcon-root": {
-                          color: "white", // Default color (outline of the radio button)
-                        },
-                        "&.Mui-checked .MuiSvgIcon-root": {
-                          color: "white", // Color when the radio button is selected
-                        },
-                      }}
-                    />
-                  </RadioGroup>
-                </FormControl>
                 <Button variant="outlined" onClick={handleSubmit} style={{width:'33%'}}>
                   Submit
                 </Button>
@@ -262,35 +179,6 @@ function Conctact_form() {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
-      {/* Calendar element display */}
-      <AnimatePresence>
-        <div
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            minHeight: "100%",
-          }}
-        >
-          {calendarVisible && (
-            <motion.div
-              key="second"
-              initial={{ x: 500, opacity: 0 }} // Slide in from the right
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: TRANSITION_DURATION }}
-              style={{
-                background: "transparent",
-                padding: "20px",
-                width: "auto",
-                minHeight: "100%",
-              }}
-            >
-              <div className="space-grotesk-big-bold inverted-color-text">
-                <Calendar backAction_={toggle_back} confirmAction_={confirm_action}/>
-              </div>
-            </motion.div>
-          )}
-        </div>
       </AnimatePresence>
     </div>
   );

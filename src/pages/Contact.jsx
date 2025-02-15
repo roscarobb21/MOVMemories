@@ -1,20 +1,9 @@
 import { useState, useEffect } from "react";
 import Navigator from "../elements/Navbar";
 import { Container, Row, Col } from "reactstrap";
-import {
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormFeedback,
-  Alert,
-  Button,
-} from "reactstrap";
-import { db, collection, addDoc } from "../firebase";
 
 import Contact_form from "../elements/Contact_form";
 import Socials from "../elements/Socials";
-import Booking from "../elements/Booking";
 import Loader from "../pages/Loader";
 
 import "./Contact.css";
