@@ -354,7 +354,7 @@ function Navigator({ lang }) {
                           </MenuItem>
                           <MenuItem
                             onClick={() => {
-                              localStorage.setItem("language", "EN");
+                              localStorage.setItem("language", "RO");
                               window.location.reload();
                               setAnchorEl(null);
                             }}

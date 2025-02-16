@@ -18,10 +18,12 @@ const MOBILE_FORM_WIDTH = "95%";
 const NORMAL_FORM_WIDTH = "50%";
 
 function Conctact_form() {
+  const maxChars = 200
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Initial check
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      console.log(isMobile)
+      setIsMobile((window.innerWidth < 768));
     };
 
     // Add event listener for resize
@@ -42,17 +44,8 @@ function Conctact_form() {
   const [message, setMessage] = useState("");
   const [generalErr, setGeneralErr] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("y");
 
-  const add_contact_message = async () => {
-    console.log("Not supported right now!");
-  };
-
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // validations
     if (!emailRegex.test(email)) {
       setEmailErr("Please provide a valid email 🥰");
@@ -70,7 +63,29 @@ function Conctact_form() {
     }
     // also sumbit in database without booking
     // TODO submit
-    if (selectedValue === "n") {
+      let formData = new FormData();
+      formData.append("First Name: ", first_name);
+      formData.append("Last Name: ", last_name);
+      formData.append("Email: ", email);
+      formData.append("Phone: ", phone);
+      formData.append("Message: ", message);
+      formData.append("access_key", "4dd5d337-f06c-4f25-8da7-2344e9dd3485");
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        setSubmitSuccess(true);
+      } else {
+        console.log("Error", data);
+        setSubmitSuccess(false);
+        setGeneralErr(data)
+      }
+
       setSubmitSuccess(true);
       setTimeout(() => {
         setSubmitSuccess(false);
@@ -80,8 +95,6 @@ function Conctact_form() {
       setEmail("");
       setPhone("");
       setMessage("");
-    }
-    add_contact_message();
   };
 
   return (
@@ -154,6 +167,8 @@ function Conctact_form() {
           <TextField
             value={message}
             style={{ backgroundColor: "white" }}
+            helperText={`${message.length} / ${maxChars} characters`}
+            inputProps={{ maxLength: maxChars }} // Enforce limit
             id="filled-multiline-static"
             label="Message"
             multiline

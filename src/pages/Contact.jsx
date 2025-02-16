@@ -55,7 +55,7 @@ function Contact({ langData, navData }) {
       <div style={{ minHeight: "100vh" }} className="background-dark-color">
       <Navigator lang={navLang} />  
       <div style={{marginTop: "30px"}}>
-        <Container fluid className="default-container-padding">
+        <Container fluid className="default-container-padding" style={{width: isMobile ? "100%" : "75%"}}>
         <Row md="12" className="d-flex justify-content-center align-items-center">
           <Col md="3" sm="0" xs="0"></Col>
           <Col md="6" sm="12" xs="0">
@@ -66,7 +66,7 @@ function Contact({ langData, navData }) {
         <br></br>
         <Row>
           <Col md="3" xs="0"></Col>
-          <Col md="6" xs="12">
+          <Col md="6" xs="12" >
           <div className="inverted-color-text space-grotesk-slim justify-text">{langFile.body}</div>
           </Col>
           <Col md="3" xs="0"></Col>
