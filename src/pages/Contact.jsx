@@ -53,51 +53,32 @@ function Contact({ langData, navData }) {
   return (
     <div>
       <div style={{ minHeight: "100vh" }} className="background-dark-color">
-        <Navigator lang={navLang} />
-        <Container
-          style={{ minHeight: "70vh" }}
-          className="d-flex margin-from-header default-container-padding"
-        >
-          <Row
-            style={{ heigh: "inherit", width: "100% !important" }}
-            className="justify-content-center align-items-center"
-          >
-            <Col lg={6} md={12}>
-              <Row>
-                <div className="inverted-color-text space-grotesk-big-bold medium-text justify-text">
-                  {langFile.header}
-                </div>
-              </Row>
-              <br></br>
-              <br></br>
-              <Row>
-                <div className="inverted-color-text space-grotesk-slim justify-text">
-                  {/* Alternatively, you can email us @ info@movmemories.com or contact
-              us on social media by pressing on your preferred one below */}
-                  {langFile.body}
-                </div>
-              </Row>
-            </Col>
-          </Row>
-          <br></br>
-          <br></br>
-          <Row
-            className="d-flex justify-content-center align-items-center"
-            style={{ width: "100%" }}
-          >
-            <Col
-              lg={12}
-              md={12}
-              style={{ height: isMobile ? "auto" : "100%" }}
-              className="justify-content-center align-items-center"
-            >
-              <div className="justify-content-center align-items-center">
-                <Contact_form />
-              </div>
-            </Col>
-          </Row>
+      <Navigator lang={navLang} />  
+      <div style={{marginTop: "30px"}}>
+        <Container fluid className="default-container-padding">
+        <Row md="12" className="d-flex justify-content-center align-items-center">
+          <Col md="3" sm="0" xs="0"></Col>
+          <Col md="6" sm="12" xs="0">
+          <div className="inverted-color-text space-grotesk-big-bold medium-text justify-text">{langFile.header}</div>
+          </Col>
+          <Col md="3" sm="0" xs="0"></Col>
+        </Row>
+        <br></br>
+        <Row>
+          <Col md="3" xs="0"></Col>
+          <Col md="6" xs="12">
+          <div className="inverted-color-text space-grotesk-slim justify-text">{langFile.body}</div>
+          </Col>
+          <Col md="3" xs="0"></Col>
+        </Row>
+        <br></br>
+        <Row>
+          <Col>
+          <Contact_form />
+          </Col>
+        </Row>
         </Container>
-        <div>{/* <Booking lang={langFile.booking} /> */}</div>
+        </div>
         <Socials />
       </div>
     </div>

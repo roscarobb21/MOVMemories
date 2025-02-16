@@ -8,7 +8,7 @@ import "./Socials.css";
 
 function Socials() {
   return (
-    <div className="socials-padding">
+    <div className="socials-padding socials-margin">
       <div className="inverted-color-text stick-to-bottom space-grotesk-1">
         Join us in our own little social media world
       </div>

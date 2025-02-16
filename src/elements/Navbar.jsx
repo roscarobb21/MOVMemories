@@ -9,25 +9,32 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu
 } from "reactstrap";
-
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { Offcanvas, OffcanvasBody } from "reactstrap";
 
 import logo from "../assets/logo.png";
 import { Cross as Hamburger } from "hamburger-react";
-import Loader from "../pages/Loader"
+import Loader from "../pages/Loader";
 import "./Navbar.css";
 import "./SlidingComponent.css";
 
-function Navigator({lang}) {
-  const [isOpen, setIsOpen] = useState(false);
+function Navigator({ lang }) {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [isBurgerOpen, setBurgerOpen] = useState(false);
   const [navLang, setNavlang] = useState(null);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     setNavlang(lang);
@@ -127,7 +134,7 @@ function Navigator({lang}) {
             className="d-flex justify-content-center align-items-center"
           >
             <Navbar expand="md">
-              <Collapse isOpen={isOpen} navbar>
+              <Collapse navbar>
                 <Nav className="me-auto" navbar>
                   <NavItem className="mx-2">
                     <NavLink href="/">
@@ -181,31 +188,49 @@ function Navigator({lang}) {
                       </span>
                     </NavLink>
                   </NavItem>
-                  <UncontrolledDropdown nav inNavbar >
-                    <DropdownToggle nav >
-                      <span className="nav-button-color space-grotesk-1 inverted-color-text ">
+                  <NavItem className="mx-2">
+                    <div
+                      className="d-flex nav-button-color space-grotesk-1 inverted-color-text"
+                      style={{ cursor: "pointer", height: "100%" }}
+                      onClick={handleClick}
+                    >
+                      <span className="align-self-center justify-content-center align-items-center">
                         {navLang.language}
                       </span>
-                    </DropdownToggle>
-                    <DropdownMenu className="dropdown-menu-dark">
-                      <DropdownItem
+                    </div>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "left",
+                      }}
+                    >
+                      <MenuItem
                         onClick={() => {
                           localStorage.setItem("language", "EN");
                           window.location.reload();
+                          setAnchorEl(null);
                         }}
                       >
                         EN 🇬🇧
-                      </DropdownItem>
-                      <DropdownItem
+                      </MenuItem>
+                      <MenuItem
                         onClick={() => {
                           localStorage.setItem("language", "RO");
                           window.location.reload();
+                          setAnchorEl(null);
                         }}
                       >
                         RO 🇷🇴
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </UncontrolledDropdown>
+                      </MenuItem>
+                    </Menu>
+                  </NavItem>
                 </Nav>
               </Collapse>
             </Navbar>
@@ -293,58 +318,50 @@ function Navigator({lang}) {
                       </Row>
                       <br></br>
                       <Row>
-                        {/* <UncontrolledDropdown className="">
-                          <DropdownToggle nav caret className="">
-                            <div className="">
-                              Language
-                            </div>
-                          </DropdownToggle>
-                          <DropdownMenu right>
-                            <DropdownItem
-                              onClick={() => {
-                                localStorage.setItem("language", "EN");
-                                window.location.reload();
-                              }}
-                            >
-                              EN 🇬🇧
-                            </DropdownItem>
-                            <DropdownItem
-                              onClick={() => {
-                                localStorage.setItem("language", "RO");
-                                window.location.reload();
-                              }}
-                            >
-                              RO 🇷🇴
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown> */}
-                        <UncontrolledDropdown dark style={{ background: ".unset" }}>
-                          <DropdownToggle
-                            tag="span"
-                            className="nav-text-font nav-text-large nav-option space-grotesk-1"
+                        <div
+                          style={{
+                            cursor: "pointer",
+                            height: "100%",
+                            widht: "100%",
+                          }}
+                          onClick={handleClick}
+                        >
+                          <span className="nav-button-color space-grotesk-1 inverted-color-text nav-option">
+                            {navLang.language}
+                          </span>
+                        </div>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "left",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                          }}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              localStorage.setItem("language", "EN");
+                              window.location.reload();
+                              setAnchorEl(null);
+                            }}
                           >
-                            {" "}
-                            <span className="nav-button-color space-grotesk-1 inverted-color-text" style={{fontSize:'2rem'}}>{navLang.language}</span>
-                          </DropdownToggle>
-                          <DropdownMenu dark>
-                          <DropdownItem
-                              onClick={() => {
-                                localStorage.setItem("language", "EN");
-                                window.location.reload();
-                              }}
-                            >
-                              EN 🇬🇧
-                            </DropdownItem>
-                            <DropdownItem
-                              onClick={() => {
-                                localStorage.setItem("language", "RO");
-                                window.location.reload();
-                              }}
-                            >
-                              RO 🇷🇴
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
+                            EN 🇬🇧
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              localStorage.setItem("language", "EN");
+                              window.location.reload();
+                              setAnchorEl(null);
+                            }}
+                          >
+                            RO 🇷🇴
+                          </MenuItem>
+                        </Menu>
                       </Row>
                     </Container>
                   </OffcanvasBody>
