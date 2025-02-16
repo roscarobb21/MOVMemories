@@ -7,24 +7,11 @@ import Socials from "../elements/Socials";
 import Loader from "../pages/Loader";
 
 import "./Contact.css";
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 function Contact({ langData, navData }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Initial check
-  const [emailValid, setEmailValid] = useState(undefined);
-  const [generalError, setGeneralError] = useState("");
-  const [submit, setSubmit] = useState(undefined);
   const [navLang, setNavLang] = useState(null);
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    message: "",
-    phoneNumber: "",
-  });
-
-  const [statusMessage, setStatusMessage] = useState("");
   const [langFile, setLangFile] = useState(null);
 
   useEffect(() => {

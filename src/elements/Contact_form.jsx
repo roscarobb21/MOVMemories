@@ -3,10 +3,7 @@ import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import { motion, AnimatePresence } from "framer-motion";
-
+import CircularProgress from '@mui/material/CircularProgress';
 import Alert from "@mui/material/Alert";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -44,6 +41,7 @@ function Conctact_form() {
   const [message, setMessage] = useState("");
   const [generalErr, setGeneralErr] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [startSubmit, setStartSubmit] = useState(false);
 
   const handleSubmit = async () => {
     // validations
@@ -61,6 +59,7 @@ function Conctact_form() {
       setGeneralErr("Please fill out the form 🥰");
       return;
     }
+      setStartSubmit(true);
     // also sumbit in database without booking
     // TODO submit
       let formData = new FormData();
@@ -87,6 +86,7 @@ function Conctact_form() {
       }
 
       setSubmitSuccess(true);
+      setStartSubmit(false);
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
@@ -180,13 +180,15 @@ function Conctact_form() {
             }}
           />
           <br></br>
-          <Button
+          {!startSubmit && <Button
             variant="outlined"
             onClick={handleSubmit}
             style={{ width: "90px" }}
           >
             Submit
-          </Button>
+          </Button>}
+          {startSubmit && 
+          <CircularProgress />}
         </Box>
         {generalErr && <Alert severity={"error"}>{generalErr}</Alert>}
         {submitSuccess && (
